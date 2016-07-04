@@ -6,6 +6,7 @@ if(any(!has)) install.packages(wants[!has])
 require(jsonlite)
 require(curl)
 require(leaflet)
+require(magrittr)
 
 
 #pull data from json file embedded in the Guardian's The Counted website: http://www.theguardian.com/thecounted
