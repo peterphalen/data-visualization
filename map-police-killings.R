@@ -10,16 +10,15 @@ require(magrittr)
 
 #pull data from json file embedded in the Guardian's The Counted website: http://www.theguardian.com/thecounted
 thecounted <- fromJSON("https://interactive.guim.co.uk/2015/the-counted/v/1455138961531/files/skeleton.json")
-thecounted <- subset(thecounted, name != "Unknown") #drop people not yet identified
 
 #Color-code for whether the victim was armed
 #  Red = Unarmed
 unarmedC <-"#ff0000"
-#  Blue = armed
-armedC <-  "#ffa500"
+#  Teal = armed
+armedC <-  "#008080"
 #  Black = Don't know or ambiguous category like "Non-lethal firearm" or "vehicle"
 idkC <- "#000000"
-pal <- colorFactor(c(rep(armedC,3), unarmedC, rep(idkC,4)), domain= c("Disputed", 
+pal <- colorFactor(c(idkC, rep(armedC,2), unarmedC, rep(idkC,4)), domain= c("Disputed", 
                                                                       "Firearm", 
                                                                       "Knife", 
                                                                       "No", 
@@ -30,8 +29,8 @@ pal <- colorFactor(c(rep(armedC,3), unarmedC, rep(idkC,4)), domain= c("Disputed"
 
 # automatically set date range for pulled data
 today <- Sys.Date()
-today <- format(today, format="%b %Y")
-dateRange <- paste0("(Jan 2015"," - ", today,")")
+today <- format(today, format="%b %d %Y")
+dateRange <- paste0("(Jan 01 2015"," - ", today,")")
 
 #Use the leaflet htmlwidget to create an interactive online visualization of data
 leaflet(data = thecounted) %>%   #data from the counted
@@ -50,26 +49,132 @@ leaflet(data = thecounted) %>%   #data from the counted
     labels = c("Unarmed", "Armed", "Unknown / non-lethal / vehicle / other"))  %>%
   
   #dynamically add markers for people who were killed
-  addCircleMarkers(~long, ~lat, radius = 5.5, stroke=FALSE, 
+  
+    addCircleMarkers(data=subset(thecounted, race=="B"), ~long, ~lat, stroke=FALSE, 
                    color = ~pal(armed), #color defined above
-                   fillOpacity = ifelse(thecounted$armed=="No",0.9,0.3), #make unarmed dots more visible
-                   
+                   fillOpacity = ifelse(thecounted$armed=="No",0.85,0.35), #make unarmed dots more visible
+                   group = "Black",
                    #create pop-up windows with some information for each marker
+                  
                    popup = ~ paste(sep="<br/>",name, 
-                                   #include race if available
-                                   ifelse(race == "B", "Black", 
-                                          ifelse(race == "W" , "White",
-                                                 ifelse(race =="H", "Hispanic",
-                                                        ifelse(race == "A", "Asian",
-                                                               ifelse(race == "N", "Native American",
-                                                                      ifelse(race == "U", "Race unknown", "")))))),
+                                   "Black",
                                    #include cause of death
                                    ifelse(classification == "Gunshot", "Killed by gunshot",
                                           ifelse(classification == "Death in custody", "Died in custody",
                                                  ifelse(classification == "Other", "",
                                                         ifelse(classification == "Taser", "Killed by taser",
-                                                               "Struck by vehicle")))),
+                                                               ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))),
                                    #tell us whether they were unarmed or if unknown, else leave blank
                                    #because the categories for being armed are convoluted
                                    ifelse(armed=="No", "Unarmed", 
-                                          ifelse(armed=="Unknown", "Unknown if armed", "")))   )
+                                          ifelse(armed=="Unknown", "Unknown if armed", 
+                                                 ifelse(armed=="Disputed", "Disputed if armed", ""))) ))   %>%
+                   
+                   #dynamically add markers for people who were killed
+                   addCircleMarkers(data=subset(thecounted, race=="W"), ~long, ~lat, stroke=FALSE, 
+                                    color = ~pal(armed), #color defined above
+                                    fillOpacity = ifelse(thecounted$armed=="No",0.85,0.35), #make unarmed dots more visible
+                                    group = "White",
+                                    #create pop-up windows with some information for each marker
+                                    popup = ~ paste(sep="<br/>",name, 
+                                                    "White",
+                                                    #include cause of death
+                                                    ifelse(classification == "Gunshot", "Killed by gunshot",
+                                                           ifelse(classification == "Death in custody", "Died in custody",
+                                                                  ifelse(classification == "Other", "",
+                                                                         ifelse(classification == "Taser", "Killed by taser",
+                                                                                ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))),
+                                                    #tell us whether they were unarmed or if unknown, else leave blank
+                                                    #because the categories for being armed are convoluted
+                                                    ifelse(armed=="No", "Unarmed", 
+                                                           ifelse(armed=="Unknown", "Unknown if armed", 
+                                                                  ifelse(armed=="Disputed", "Disputed if armed", ""))) ))  %>%
+                                      
+                                      #dynamically add markers for people who were killed
+                                      addCircleMarkers(data=subset(thecounted, race=="H"), ~long, ~lat, stroke=FALSE, 
+                                                       color = ~pal(armed), #color defined above
+                                                       fillOpacity = ifelse(thecounted$armed=="No",0.85,0.35), #make unarmed dots more visible
+                                                       group = "Hispanic",
+                                                       #create pop-up windows with some information for each marker
+                                                       popup = ~ paste(sep="<br/>",name, 
+                                                                       "Hispanic",
+                                                                       #include cause of death
+                                                                       ifelse(classification == "Gunshot", "Killed by gunshot",
+                                                                              ifelse(classification == "Death in custody", "Died in custody",
+                                                                                     ifelse(classification == "Other", "",
+                                                                                            ifelse(classification == "Taser", "Killed by taser",
+                                                                                                   ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))),
+                                                                       #tell us whether they were unarmed or if unknown, else leave blank
+                                                                       #because the categories for being armed are convoluted
+                                                                       ifelse(armed=="No", "Unarmed", 
+                                                                              ifelse(armed=="Unknown", "Unknown if armed", 
+                                                                                     ifelse(armed=="Disputed", "Disputed if armed", ""))) ))  %>% 
+                                                         
+                                                         #dynamically add markers for people who were killed
+                                                         addCircleMarkers(data=subset(thecounted, race=="N"), ~long, ~lat, stroke=FALSE, 
+                                                                          color = ~pal(armed), #color defined above
+                                                                          fillOpacity = ifelse(thecounted$armed=="No",0.85,0.35), #make unarmed dots more visible
+                                                                          group = "Native American",
+                                                                          #create pop-up windows with some information for each marker
+                                                                          popup = ~ paste(sep="<br/>",name, 
+                                                                                          "Native American",
+                                                                                          #include cause of death
+                                                                                          ifelse(classification == "Gunshot", "Killed by gunshot",
+                                                                                                 ifelse(classification == "Death in custody", "Died in custody",
+                                                                                                        ifelse(classification == "Other", "",
+                                                                                                               ifelse(classification == "Taser", "Killed by taser",
+                                                                                                                      ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))),
+                                                                                          #tell us whether they were unarmed or if unknown, else leave blank
+                                                                                          #because the categories for being armed are convoluted
+                                                                                          ifelse(armed=="No", "Unarmed", 
+                                                                                                 ifelse(armed=="Unknown", "Unknown if armed", 
+                                                                                                        ifelse(armed=="Disputed", "Disputed if armed", ""))) ))  %>%
+                                                                            
+                                                                            #dynamically add markers for people who were killed
+                                                                            addCircleMarkers(data=subset(thecounted, race=="A"), ~long, ~lat, stroke=FALSE, 
+                                                                                             color = ~pal(armed), #color defined above
+                                                                                             fillOpacity = ifelse(thecounted$armed=="No",0.85,0.35), #make unarmed dots more visible
+                                                                                             group = "Asian",
+                                                                                             #create pop-up windows with some information for each marker
+                                                                                             popup = ~ paste(sep="<br/>",name, 
+                                                                                                             "Asian",
+                                                                                                             #include cause of death
+                                                                                                             ifelse(classification == "Gunshot", "Killed by gunshot",
+                                                                                                                    ifelse(classification == "Death in custody", "Died in custody",
+                                                                                                                           ifelse(classification == "Other", "",
+                                                                                                                                  ifelse(classification == "Taser", "Killed by taser",
+                                                                                                                                         ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))),
+                                                                                                             #tell us whether they were unarmed or if unknown, else leave blank
+                                                                                                             #because the categories for being armed are convoluted
+                                                                                                             ifelse(armed=="No", "Unarmed", 
+                                                                                                                    ifelse(armed=="Unknown", "Unknown if armed", 
+                                                                                                                           ifelse(armed=="Disputed", "Disputed if armed", ""))) ))  %>% 
+                                                                                             
+                                                                                               #dynamically add markers for people who were killed
+                                                                                               addCircleMarkers(data=subset(thecounted, (race=="O" | race=="U"), ~long, ~lat, stroke=FALSE, 
+                                                                                                                color = ~pal(armed), #color defined above
+                                                                                                                fillOpacity = ifelse(thecounted$armed=="No",0.85,0.35), #make unarmed dots more visible
+                                                                                                                group = "Other/unknown",
+                                                                                                                #create pop-up windows with some information for each marker
+                                                                                                                popup = ~ paste(sep="<br/>",name, 
+                                                                                                                                "Other/unknown",
+                                                                                                                                #include cause of death
+                                                                                                                                ifelse(classification == "Gunshot", "Killed by gunshot",
+                                                                                                                                       ifelse(classification == "Death in custody", "Died in custody",
+                                                                                                                                              ifelse(classification == "Other", "",
+                                                                                                                                                     ifelse(classification == "Taser", "Killed by taser",
+                                                                                                                                                            ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))),
+                                                                                                                                #tell us whether they were unarmed or if unknown, else leave blank
+                                                                                                                                #because the categories for being armed are convoluted
+                                                                                                                                ifelse(armed=="No", "Unarmed", 
+                                                                                                                                       ifelse(armed=="Unknown", "Unknown if armed", 
+                                                                                                                                              ifelse(armed=="Disputed", "Disputed if armed", ""))) ))  %>% 
+                                                                                                                  # Layers control
+                                                                                                                  addLayersControl(
+                                                                                                                    overlayGroups = c("White", "Black", "Hispanic", "Native American","Asian", "Other/unknown"),
+                                                                                                                    position = "topright",
+                                                                                                                    options = layersControlOptions(collapsed = FALSE)
+                                                                                                                  )
+                   
+                   
+                   
