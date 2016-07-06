@@ -61,8 +61,7 @@ leaflet(data = thecounted) %>%   #data from the counted
                                                                ifelse(race == "N", "Native American",
                                                                       ifelse(race == "U", "Race unknown", "")))))),"<br/>",
                                  
-                                   #tell us whether they were unarmed or if unknown, else leave blank
-                                   #because the categories for being armed are convoluted
+                                   #tell us about whether/how they were armed
                                    ifelse(armed=="No", "Unarmed<br/>", 
                                           ifelse(armed=="Unknown", "Unknown if armed<br/>",
                                                   ifelse(armed=="Vehicle", "Armed with 'vehicle'<br/>",
@@ -76,7 +75,7 @@ leaflet(data = thecounted) %>%   #data from the counted
                                                ifelse(classification == "Struck by vehicle", "Struck by vehicle", "")))))),              
                    group="2015")  %>%
   
-  ## 2016 only group (to allow user to select years)
+  ## 2016 only group
   addCircleMarkers(data=thecounted[as.Date(thecounted$date) > as.Date("2015/12/31"),], ~long, ~lat, stroke=FALSE, 
                    color = ~pal(armed), #color defined above
                    fillOpacity = ~ifelse(armed=="No",0.75,0.3), #make unarmed dots more visible
@@ -91,8 +90,7 @@ leaflet(data = thecounted) %>%   #data from the counted
                                                                ifelse(race == "N", "Native American",
                                                                       ifelse(race == "U", "Race unknown", "")))))),"<br/>",
                                    
-                                   #tell us whether they were unarmed or if unknown, else leave blank
-                                   #because the categories for being armed are convoluted
+                                   #tell us about whether/how they were armed
                                    ifelse(armed=="No", "Unarmed<br/>", 
                                           ifelse(armed=="Unknown", "Unknown if armed<br/>",
                                                  ifelse(armed=="Vehicle", "Armed with 'vehicle'<br/>",
@@ -106,7 +104,7 @@ leaflet(data = thecounted) %>%   #data from the counted
                                                                ifelse(classification == "Struck by vehicle", "Struck by vehicle", "")))))),
                    group="2016") %>%
   
-  #give user the option of selecting years
+  #give user the option of selecting years manually
   addLayersControl(
     overlayGroups = c("2015","2016"),
     options = layersControlOptions(collapsed = FALSE)
