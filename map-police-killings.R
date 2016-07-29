@@ -2,22 +2,19 @@
 wants <- c("magrittr", "leaflet", "jsonlite", "curl")
 has   <- wants %in% rownames(installed.packages())
 if(any(!has)) install.packages(wants[!has])
-require(jsonlite)
-require(curl)
-require(leaflet)
-require(magrittr)
 
-#pull data from json file embedded in the Guardian's The Counted website: http://www.theguardian.com/thecounted
-thecounted <- fromJSON("https://interactive.guim.co.uk/2015/the-counted/v/1467749810058/files/skeleton.json")
+#load needed packages
+sapply(wants, require, character.only = TRUE)
+
+#pull data from json file
+thecounted <- fromJSON("https://raw.githubusercontent.com/joshbegley/the-counted/master/skeleton.json")
 thecounted <- thecounted[thecounted$lat != "", ] #remove single entry that has missing lat/lang values, avoid later glitches
 
+
 #Color-code for whether the victim was armed
-#  Red = Unarmed
-unarmedC <-"#ff0000"
-#  Teal = armed
-armedC <-  "#008080"
-#  Black = Don't know or ambiguous category like "Non-lethal firearm" or "vehicle"
-idkC <- "#000000"
+unarmedC <-"#ff0000"  # Red = Unarmed
+armedC <-  "#008080"  # Teal = armed
+idkC <- "#000000"  # Black = Don't know or ambiguous category like "Non-lethal firearm" or "vehicle"
 pal <- colorFactor(c(idkC, rep(armedC,2), unarmedC, rep(idkC,4)), domain= c("Disputed", 
                                                                             "Firearm", 
                                                                             "Knife", 
