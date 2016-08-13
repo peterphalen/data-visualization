@@ -1,5 +1,5 @@
 #download needed packages you don't have 
-wants <- c("magrittr", "leaflet", "jsonlite", "curl")
+wants <- c("magrittr", "leaflet", "jsonlite", "curl", "httr")
 has   <- wants %in% rownames(installed.packages())
 if(any(!has)) install.packages(wants[!has])
 
@@ -105,5 +105,7 @@ leaflet(data = thecounted) %>%   #data from the counted
   addLayersControl(
     overlayGroups = c("2015","2016"),
     options = layersControlOptions(collapsed = FALSE)
-  ) 
+  )
   
+BROWSE("https://raw.githubusercontent.com/peterphalen/peterphalen.github.io/master/datavisualization/map-police-killings.html")
+
