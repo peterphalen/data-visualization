@@ -8,7 +8,7 @@ sapply(wants, require, character.only = TRUE)
 
 #pull data from json file
 thecounted <- fromJSON("https://raw.githubusercontent.com/joshbegley/the-counted/master/skeleton.json")
-thecounted <- thecounted[thecounted$lat != "", ] #remove single entry that has missing lat/lang values, avoid later glitches
+thecounted <- thecounted[complete.cases(as.numeric(thecounted$lat)),] #remove single entry that has missing lat/lang values, avoid later glitches
 
 
 #Color-code for whether the victim was armed
@@ -46,7 +46,7 @@ leaflet(data = thecounted) %>%   #data from the counted
   ## 2015 only group (to allow user to select years)
   addCircleMarkers(data=thecounted[as.Date(thecounted$date) <= as.Date("2015/12/31"),],~long, ~lat, stroke=FALSE, 
                    color = ~pal(armed), #color defined above
-                   fillOpacity = ~ifelse(armed=="No",0.75,0.3), #make unarmed dots more visible
+                   fillOpacity = ~ifelse(armed=="No",0.75,0.4), #make unarmed dots more visible
                    #create pop-up windows with some information for each marker
                    popup = ~ paste(name, "<br/>",
                                    "Age",age,"<br/>",
