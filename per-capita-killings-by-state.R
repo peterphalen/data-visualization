@@ -6,7 +6,7 @@
 ##########
 
 #download needed packages you don't have 
-wants <- c("magrittr", "leaflet", "jsonlite", "dplyr")
+wants <- c("magrittr", "leaflet", "jsonlite", "plyr")
 has   <- wants %in% rownames(installed.packages())
 if(any(!has)) install.packages(wants[!has])
 
@@ -136,7 +136,9 @@ Bper %>%
   #example 8 horizontal stacked bar
   dimple(
     y = "State", x="Per100k",
-    type = "bar"
+    type = "bar",
+    height= 700,
+    width= 960
   ) %>%
   xAxis(type = "addMeasureAxis", title="Per 100,000") %>%
   #good test of orderRule on y instead of x
