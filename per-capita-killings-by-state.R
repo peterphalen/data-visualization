@@ -1,3 +1,10 @@
+
+##########
+#
+# This code generates a graph of police killings of black people per capita, by state. Mouse-over bars for detail.
+#
+##########
+
 #download needed packages you don't have 
 wants <- c("magrittr", "leaflet", "jsonlite", "dplyr")
 has   <- wants %in% rownames(installed.packages())

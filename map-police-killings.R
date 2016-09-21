@@ -1,3 +1,4 @@
+
 #download needed packages you don't have 
 wants <- c("magrittr", "leaflet", "jsonlite", "curl", "httr")
 has   <- wants %in% rownames(installed.packages())
