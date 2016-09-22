@@ -113,12 +113,13 @@ census_statesonly <- census[census$state != "United States",]
 
 # loop for each state 
 for (i in unique(thecounted$state)[! "United States" %in% unique(thecounted$state)]) {  
-  # number of black people in state i
+  # number of black people killed in state i
   blackPeopleKilled <-  nrow(thecounted[(thecounted$race == "B") & (thecounted$state == i),]) 
-  # if state has *any* killed black people, add a row to column blacks-killed-permillion for each state
+  # if state has killed *any* black people, add a row to column blacks-killed-per-x for each state
   if ( blackPeopleKilled != 0 ){ 
+    #number of black people killed per x, given census data on population by state
     Bper <- rbind(Bper, c(i, (blackPeopleKilled / census_statesonly[census_statesonly$state == i,"bac"] ) * per )) 
-    # but if the state has no black people just give it a zero-per-million
+  # but if the state has killed no black people just give it a zero
   } else {
     Bper <- rbind( Bper, c(i, 0 ))  
   }
@@ -129,10 +130,10 @@ Bper <- Bper[order(as.numeric(Bper$Per100k), decreasing=TRUE),]
 
 Bper["State"] <- Bper["state"] #rename "state" to capital letters
 
+#create html bar graph of number of black people killed per capita, by state
+#mouse-over to get the exact value
 Bper %>% 
-  
-  #example 8 horizontal stacked bar
-  dimple(
+    dimple(
     y = "State", x="Per100k",
     type = "bar",
     height= 700,
