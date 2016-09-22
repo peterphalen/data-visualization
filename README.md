@@ -1,5 +1,5 @@
 # Mapping police killings
-R scripts that generate interactive online visualizations of police killings using a json file scraped from the Guardian's The Counted website. Conveys things like name, ethnicity, how the person was killed, whether they were armed at the time. 
+R scripts that generate interactive online visualizations of police killings. Use US census data and a json file scraped from the Guardian's The Counted website. 
 
 For the output of the map-police-killings.R script go here: 
 https://www.peterphalen.com/datavisualization/map-police-killings.html
