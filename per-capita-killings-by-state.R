@@ -2,6 +2,7 @@
 ##########
 #
 # This code generates a graph of police killings of black people per capita, by state. Mouse-over bars for detail.
+# Output viewable here: https://www.peterphalen.com/datavisualization/police-killings-graph-viz.html
 #
 ##########
 
@@ -81,14 +82,11 @@ thecounted$state <- revalue(thecounted$state, c("AL"="Alabama", #rename all the 
 census_raw <- read.csv("/Users/PeterPhalen/Dropbox/Manuscripts/WFYI visualizations/PEP_2015_PEPSR5H/PEP_2015_PEPSR5H_with_ann.csv")
 
 ## CLEAN CENSUS DATA
-
 # 2015 estimate only
 census <- subset(census_raw, Year.id == "est72015") 
 # both sexes 
-# msm - maybe only men or breaking up by gender will provide more insight?
 census <- subset(census, Sex.id == "totsex") 
 # non-hispanic only 
-# msm because black lives matter
 census <- subset(census, Hisp.id == "nhisp") 
 
 # rename location variable to something that doesn't sound stupid
