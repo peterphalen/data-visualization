@@ -12,7 +12,7 @@ thecounted <- fromJSON("https://raw.githubusercontent.com/joshbegley/the-counted
 thecounted <- thecounted[complete.cases(as.numeric(thecounted$lat)),] #remove single entry that has missing lat/lang values, avoid later glitches
 
 
-#Color-code for whether the victim was armed
+#Color-code thecounted codes for whether the victim was armed
 unarmedC <-"#ff0000"  # Red = Unarmed
 armedC <-  "#008080"  # Teal = armed
 idkC <- "#000000"  # Black = Don't know or ambiguous category like "Non-lethal firearm" or "vehicle"
@@ -161,7 +161,7 @@ for (i in 1:nrow(wpost)){
       
       
       #if after all this we still have multiple possible entries
-      #stop script and throw informative warning
+      #stop script and throw informative error
       if(nrow(res ) > 1){  
         stop(paste("There are multiple cities named", res$name,"in the state:",unique(res$adminName1)))
       }
@@ -185,7 +185,7 @@ for (i in 1:nrow(wpost)){
   }
   
   
-  #throw a warning if we failed to come up with a legitimate lat-long for the lcoation
+  #throw a warning if we failed to come up with a legitimate lat-long for the location
   if (any(!complete.cases(res$lat), !complete.cases(res$lat))){
     warning(paste(i, x$name, "in", x$city, x$state, "lat long not found" ))
   }
