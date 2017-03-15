@@ -7,7 +7,7 @@
 ##########
 
 #download needed packages you don't have 
-wants <- c("magrittr", "leaflet", "jsonlite", "plyr")
+wants <- c("magrittr", "leaflet", "jsonlite", "plyr", "httr")
 has   <- wants %in% rownames(installed.packages())
 if(any(!has)) install.packages(wants[!has])
 
@@ -134,15 +134,14 @@ Bper["State"] <- Bper["state"] #rename "state" to capital letters
 #mouse-over to get the exact value
 Bper %>% 
     dimple(
-    y = "State", x="Per100k",
-    type = "bar",
+    y = "State", 
+    x="Per100k",
     height= 700,
-    width= 960
-  ) %>%
-  xAxis(type = "addMeasureAxis", title="Per 100,000") %>%
-  #good test of orderRule on y instead of x
+    width= 960,
+    type = "bar") %>%
+  xAxis(type = "addMeasureAxis", title="Black people killed by police (per 100,000)") %>%
   yAxis(type = "addCategoryAxis", orderRule="Per100k")
 
 
-
+BROWSE("https://raw.githubusercontent.com/peterphalen/peterphalen.github.io/master/datavisualization/police-killings-graph-viz.html")
 

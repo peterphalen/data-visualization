@@ -23,7 +23,7 @@ leaflet(data = thecounted) %>%   #data from the counted
   
   #add census-tract level indicator of income
     addTiles(
-      urlTemplate = "http://www.justicemap.org/tile/tract/income/{z}/{x}/{y}.png",
+      urlTemplate = "http://www.justicemap.org/tile/{size}/{variant}/{z}/{x}/{y}.png",
       attribution = '<a href="http://www.justicemap.org/index.php?gsLayer=income&gfLon=-95.3&gfLat=39.6&giZoom=4&">Justice Map</a>',
       options=tileOptions(opacity=.55)
     ) %>%  
