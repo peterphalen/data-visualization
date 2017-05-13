@@ -1,7 +1,7 @@
 # Mapping police killings
 R scripts that generate interactive online visualizations of police killings. Uses US census data, a file scraped from the Guardian's The Counted website for pre-2017 data, and a file scraped from the Washington Post for post-2017 (some GIS assembly required). 
 
-The output of the [map-police-killings.R](map-police-killings.R) is viewable [here](https://www.peterphalen.com/datavisualization/map-police-killings.html).
+The output of [map-police-killings.R](map-police-killings.R) is viewable [here](https://www.peterphalen.com/datavisualization/map-police-killings.html).
 
 The output of [poverty-police-killings.R](poverty-police-killings.R) is viewable [here](https://www.peterphalen.com/datavisualization/poverty-police-killings.html).
 
