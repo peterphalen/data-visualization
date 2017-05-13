@@ -17,6 +17,9 @@ for (i in 1:nrow(wpost)){
   #get row
   x <- wpost[i,]
   
+  
+  #the geoname search function had trouble with the following names so
+  #I looked up the coordinates of their deaths manually
   exact.coords <- c("William Brigham", "Joshua Henry", "Frank W. Wratny", 
     "James Owens", "Joshua Martino","Kadeem Torres",
     "Kris Kristl", "Bradley Nelson", "Timothy Lionel Williams", 
@@ -52,14 +55,12 @@ for (i in 1:nrow(wpost)){
    "Medger Blake", "Joseph William Alain", "Rodney Henderson", "Daniel Loren Rucker",
    "Landon Nobles", "Scott Laurance Gilpin", "Jason Sebastian Roque", "Jacob Peterson")
   
-  #the geoname search function had trouble with the following names so
-  #I looked up the coordinates of their deaths manually
+
   if (x$name %in% exact.coords){
     
     res <- data.frame(matrix(ncol=2))
     names(res) <- c("lat", "lng")
   
-
   
     if(x$name == "Jacob Peterson"){
       res$lng <- "-117.2283824"#give exact coords. 
@@ -207,7 +208,6 @@ for (i in 1:nrow(wpost)){
       res$lng <- "-122.0157817"#give exact coords. 
       res$lat <- "38.2624659"
     } 
-    
     
     if(x$name == "Genevive Dawes"){
       res$lng <- "-96.7664497"#give exact coords. 
@@ -541,25 +541,29 @@ for (i in 1:nrow(wpost)){
     
     ### end manual entry of lat-long death locations 
     
-    #attach these coordinates to the wp.loc frame
+    #attach the manually idenitified coordinates to the wp.loc frame
     wp.loc <- rbind(wp.loc, cbind(x,res))
     
-  }else{
+  }else{ #start trying GIS look-up
+    
     #search for GPS coords of exact city name
     city.user <- paste0(x$city, user.suffix)
     res <- GNsearch(name_equals=city.user, country="US")
     
-    if (ncol(res) == 0){ #if we can't get exact match then try searching again for less exact
+    
+    ## If there isn't an obvious unique math we need to get creative:
+    
+    if (ncol(res) == 0){ #Try searching again for non-exact name
       res <- GNsearch(name=city.user, country="US")
     }
     
-    #restrict results to the state we want
+    #restrict results to the state we're looking for
     x.state <- state.name[grep(x$state, state.abb)]
     res <- res[res$adminName1 == x.state,]
     
-    #if there are multiple possible entries
-    #it can be enough to restrict the entries to those
-    #with the word "city" in the fclName column
+    #if there are multiple possible entries for a city
+    #it's sometimes enough to restrict to entries with
+    #the word "city" in the fclName column
     city.mention <- grep("city", res$fclName)
     if (length(city.mention) == 1){
       res <- res[city.mention,]
@@ -567,16 +571,17 @@ for (i in 1:nrow(wpost)){
     
     #we can also rm false positives
     #by cutting out entries with population 0
-    if (sum(res$population > 0) == 1){ #not super reliable so don't use this 
-      #as a criteria unless it actually cuts our
+    if (sum(res$population > 0) == 1){ #but not super reliable so 
+      #don't use this as a criteria unless it actually cuts our
       #possibilites down to 1
       res <- res[res$population >0, ]
     }
     
-    #if after all that we still have multiple possible entries for the city-state..
-    if (nrow(res) > 1){
+    if (nrow(res) > 1){ #if we still have multiple 
+                        # possible entries for the city-state...
+
       
-      #This clears up ambiguities in LA entry
+      #(This block clears up an ambiguity in the LA entry)
       if (x$city == "Los Angeles"){
         res <- res[res$population >100000,]
       }
@@ -594,10 +599,10 @@ for (i in 1:nrow(wpost)){
     
     
     
-    if (i != 1){
+    if (i != 1){ 
       
       #check to see if we put multiple people at identical lat-long
-      #if so throw an informative warning
+      #if so throw an informative warning and warn user if so...
       dup <- (wp.loc[,"lat"] == res$lat) & (wp.loc[,"lng"] == res$lng)
       if (TRUE %in% dup){ 
         warning( paste(x$name, "(", x$city,",", x$state,")", "is being mapped to the same location (",res$lat,res$lng ,") as someone else") )
@@ -610,14 +615,14 @@ for (i in 1:nrow(wpost)){
     }
     
     
-    #add entry to main data.frame
+    #add resulting entry to main data.frame...
     wp.loc <- rbind(wp.loc, cbind(x, res[c("lng","lat")]))
     
     
   }
   
   
-  #throw a warning if we failed to come up with a legitimate lat-long for the location
+  #throw a warning if we failed to come up with a legitimate lat-long for the person's location
   if (any(!complete.cases(res$lat), !complete.cases(res$lat))){
     warning(paste(i, x$name, "in", x$city, x$state, "lat long not found" ))
   }
@@ -626,7 +631,6 @@ for (i in 1:nrow(wpost)){
   
   progress.interval <- 50
   length.p.bar <- as.character(rep(x = "", progress.interval + 1) )
-  
 
   #initiate progress bar at first loop
   if (i == 1){
@@ -641,10 +645,10 @@ for (i in 1:nrow(wpost)){
   
 }
 
-
+#drop cases that didn't yield a lat/lang pair
 wp.loc <- wp.loc[complete.cases(wp.loc$lat),]
 
-#process info on armed / unarmed
+#process some basic info on armed / unarmed for color coding
 wp.loc$armed <- as.character(wp.loc$armed)
 if ( ( sum(wp.loc$armed == "") > 0 ) ){
   wp.loc[wp.loc$armed == "",]$armed <- "undetermined"
@@ -676,6 +680,7 @@ wp.pal <- ifelse(wp.loc$armed %in% facs[1], unarmedC,
                  ifelse(wp.loc$armed %in% facs[2:13], idkC,
                         ifelse(wp.loc$armed %in% wapo.armed, armedC, idkC)))
 
+#return data with locations and a color-coding scheme
 return (list(processedData = wp.loc, colorCodeArmed = wp.pal))
 
 }
