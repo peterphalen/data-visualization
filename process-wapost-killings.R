@@ -561,7 +561,9 @@ for (i in 1:nrow(wpost)){
     #attach the manually idenitified coordinates to the wp.loc frame
     wp.loc <- rbind(wp.loc, cbind(x,res))
     
-        }else{ #start trying GIS look-up
+        }else{ #start trying GIS look-up...
+          # the goal here is to narrow down all the possible matches to a unique
+          # match for the city given by WaPost
     
     #search for GPS coords of exact city name
     city.user <- paste0(x$city, user.suffix)
