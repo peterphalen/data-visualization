@@ -6,8 +6,10 @@
 #
 ##########
 
+
+
 #download needed packages you don't have 
-wants <- c("magrittr", "leaflet", "jsonlite", "plyr", "httr")
+wants <- c("magrittr", "leaflet", "jsonlite", "plyr", "httr", "curl", "RCurl", "geonames", "dplyr")
 has   <- wants %in% rownames(installed.packages())
 if(any(!has)) install.packages(wants[!has])
 
@@ -20,6 +22,31 @@ require(rcdimple)
 #pull data from json file embedded in the Guardian's The Counted website: http://www.theguardian.com/thecounted
 thecounted_raw <- fromJSON("https://raw.githubusercontent.com/joshbegley/the-counted/master/skeleton.json")
 thecounted <- thecounted_raw[complete.cases(as.numeric(thecounted_raw$lat)),]  #remove entries with missing lat/lang values, avoid later glitches
+
+
+#The Guardian stopped keeping track of police killings in 2017
+#use WaPost data for post-2017 killings
+
+#download csv
+wpost <- getURL("https://raw.githubusercontent.com/washingtonpost/data-police-shootings/master/fatal-police-shootings-data.csv")
+wpost <- read.csv(textConnection(wpost))
+
+#restrict dataset to 2017-present
+wpost$date <- as.POSIXct(wpost$date)
+wpost <- wpost[wpost$date > "2016-12-31 EST",]
+
+#rename variable to match thecounted scheme
+wpost <- rename(wpost, classification = manner_of_death)
+#rm TBA names
+wpost <- wpost[wpost$name != "TK TK",] 
+#if age is missing, label unknown
+wpost[!complete.cases(wpost$age),]$age <- "unknown"
+
+
+source("/Users/PeterPhalen/Dropbox/data-visualization/process-wapost-killings.R")
+output <- processWaPoKillings(data = wpost, username = "peterphalen")
+wp.loc <- output$processedData
+
 
 # make race a factor
 thecounted$race <- as.factor(thecounted$race)
@@ -79,7 +106,7 @@ thecounted$state <- revalue(thecounted$state, c("AL"="Alabama", #rename all the 
 
 
 # read census data downloaded from http://factfinder.census.gov/
-census_raw <- read.csv("/Users/PeterPhalen/Dropbox/Manuscripts/WFYI visualizations/PEP_2015_PEPSR5H/PEP_2015_PEPSR5H_with_ann.csv")
+census_raw <- read.csv("/Users/PeterPhalen/Dropbox/data-visualization/census_data.csv")
 
 ## CLEAN CENSUS DATA
 # 2015 estimate only
@@ -97,6 +124,9 @@ census["GEO.display.label"] <- NULL
 
 #create empty dataframe for black people killed per one hundred thousand
 Bper <- data.frame(state=0, Per100k=0) 
+
+
+
 
 #total number of black people killed in the USA, as per The Counted
 totalBlackPeopleKilled <- nrow(thecounted[(thecounted$race == "B"),])
