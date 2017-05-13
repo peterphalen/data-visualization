@@ -626,6 +626,8 @@ for (i in 1:nrow(wpost)){
       if (TRUE %in% dup){ 
         warning( paste(x$name, "(", x$city,",", x$state,")", "is being mapped to the same location (",res$lat,res$lng ,") as someone else") )
       }
+      
+      #Let user know if they're placing a marker in the center of a huge city (>1e6) rather than exact location
       if (as.numeric(res$population) > 1e6){
         warning( paste(x$name, "is being mapped to the center of",res$toponymName,", a city of >1 million people","in",res$adminName1,"...") )
       }
