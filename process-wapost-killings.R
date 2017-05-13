@@ -9,6 +9,7 @@ wpost <- data
 wp.loc <- data.frame(matrix(ncol=(ncol(wpost) + 2)))[complete.cases(wpost),]
 names(wp.loc) <- c(names(wpost), "lat", "lng")
 
+#this feeds username to site in their format
 user.suffix <- paste0("&username=",username)
 
 # loop over WaPost data
@@ -55,13 +56,29 @@ for (i in 1:nrow(wpost)){
    "Medger Blake", "Joseph William Alain", "Rodney Henderson", "Daniel Loren Rucker",
    "Landon Nobles", "Scott Laurance Gilpin", "Jason Sebastian Roque", "Jacob Peterson")
   
+  
+  #function to add exact coordinates more simply
+  ext.crds <- function(name, lng, lat, data=res){
+    if (x$name == name){
+      data$lng <- toString(lng)
+      data$lat <- toString(lat)
+    }
+  }
+  
 
   if (x$name %in% exact.coords){
     
     res <- data.frame(matrix(ncol=2))
     names(res) <- c("lat", "lng")
   
-  
+    
+    ext.crds("Anthony David Soderberg", 
+             -118.3076373,
+             34.2745478)
+    ext.crds("Terry Percy Campbell", 
+             -81.520041,
+             30.3245488)
+    
     if(x$name == "Jacob Peterson"){
       res$lng <- "-117.2283824"#give exact coords. 
       res$lat <- "32.9574372"
@@ -544,14 +561,14 @@ for (i in 1:nrow(wpost)){
     #attach the manually idenitified coordinates to the wp.loc frame
     wp.loc <- rbind(wp.loc, cbind(x,res))
     
-  }else{ #start trying GIS look-up
+        }else{ #start trying GIS look-up
     
     #search for GPS coords of exact city name
     city.user <- paste0(x$city, user.suffix)
     res <- GNsearch(name_equals=city.user, country="US")
     
     
-    ## If there isn't an obvious unique math we need to get creative:
+    ## If there isn't an obvious unique match we need to be more creative:
     
     if (ncol(res) == 0){ #Try searching again for non-exact name
       res <- GNsearch(name=city.user, country="US")
