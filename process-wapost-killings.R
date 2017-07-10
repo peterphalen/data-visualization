@@ -68,7 +68,15 @@ for (i in 1:nrow(wpost)){
    "Damarius Butts", "David Jones", "Adrian Maurice Hardeman", "Refugio Alvarez",
    "Isaiah Murrietta-Golding", "Salvadro Alfredo Pablo Lopez", "Sinuon Pream",
    "Michele Rice", "Theodore Brendecke", "John Spaulding", "Jermaine Claybrooks",
-   "Terry Williams", "Shawn Buck","Matthew Colton Stover", "William Tucker Mathis"
+   "Terry Williams", "Shawn Buck","Matthew Colton Stover", "William Tucker Mathis",
+   "Rogelio Vidal Landa", "Oscar Junior", "Rodney L. Cole","Tim A. Holmgren",
+   "Jocques Scott Clemmons", "George Lee Seeton","Deveonte Johnson",
+   "Joseph Paul Hogan","Robert J. Berube","Jamie Dougan","Daniel Donarski",
+   "Jose Guillermo Flores Colon", "Stephen Rich", "Chet Knuppel", "Alexander Meltz",
+   "Brett Rodriguez", "Aaron Bailey", "Terrell Kyreem Johnson", "James Edward Ray",
+   "Jason Thomas Christian", "Fred Cardenas", "Christopher Thompkins",
+   "Misael Macias Cano", "Tavis Crane", "Kevin C. Perry", "Chazz Brown",
+   "Jeffrey Findlay"
    
    )
   
@@ -77,8 +85,129 @@ for (i in 1:nrow(wpost)){
     
     res <- data.frame(matrix(ncol=2))
     names(res) <- c("lat", "lng")
-  
+
     
+
+    if(x$name == "Jeffrey Findlay"){
+      res$lng <- "-81.7121359"#give exact coords. 
+      res$lat <- "41.4545678"
+    }
+    if(x$name == "Chazz Brown"){
+      res$lng <- "-90.2186905"#give exact coords. 
+      res$lat <- "38.5967371"
+    }
+    if(x$name == "Kevin C. Perry"){
+      res$lng <- "-97.3118014"#give exact coords. 
+      res$lat <- "37.6238853"
+    }
+    if(x$name == "Tavis Crane"){
+      res$lng <- "-97.1341163"#give exact coords. 
+      res$lat <- "32.7570355"
+    }
+    if(x$name == "Misael Macias Cano"){
+      res$lng <- "-104.7757969"#give exact coords. 
+      res$lat <- "38.8542723"
+    }
+    if(x$name == "Christopher Thompkins"){
+      res$lng <- "-79.9117396"#give exact coords. 
+      res$lat <- "40.4599276"
+    }  
+    if(x$name == "Fred Cardenas"){
+      res$lng <- "-97.267994"#give exact coords. 
+      res$lat <- "32.7404268"
+    }   
+    if(x$name == "Fred Cardenas"){
+      res$lng <- "-97.267994"#give exact coords. 
+      res$lat <- "32.7404268"
+    }  
+    if(x$name == "Jason Thomas Christian"){
+      res$lng <- "-82.966608"#give exact coords. 
+      res$lat <- "39.9345941"
+    }  
+    if(x$name == "James Edward Ray"){
+      res$lng <- "-83.1601277"#give exact coords. 
+      res$lat <- "42.3590168"
+    }  
+    if(x$name == "James Edward Ray"){
+      res$lng <- "-83.1601277"#give exact coords. 
+      res$lat <- "42.3590168"
+    } 
+    if(x$name == "Terrell Kyreem Johnson"){
+      res$lng <- "-122.5687308"#give exact coords. 
+      res$lat <- "45.468068"
+    } 
+    if(x$name == "Aaron Bailey"){
+      res$lng <- "-86.1924803"#give exact coords. 
+      res$lat <- "39.8007405"
+    } 
+    if(x$name == "Brett Rodriguez"){
+      res$lng <- "-105.0602889"#give exact coords. 
+      res$lat <- "39.8201176"
+    } 
+    if(x$name == "Alexander Meltz"){
+      res$lng <- "-105.04399"#give exact coords. 
+      res$lat <- "39.8977021"
+    } 
+    if(x$name == "Chet Knuppel"){
+      res$lng <- "-105.0223897"#give exact coords. 
+      res$lat <- "40.4805557"
+    } 
+    if(x$name == "Stephen Rich"){
+      res$lng <- "-105.1262139"#give exact coords. 
+      res$lat <- "40.3992228"
+    }  
+    if(x$name == "Jose Guillermo Flores Colon"){
+      res$lng <- "-81.2664023"#give exact coords. 
+      res$lat <- "28.9114227"
+    }  
+    if(x$name == "Daniel Donarski"){
+      res$lng <- "-81.1626474"#give exact coords. 
+      res$lat <- "28.8821946"
+    }   
+    if(x$name == "Robert J. Berube"){
+      res$lng <- "-89.6263004"#give exact coords. 
+      res$lat <- "34.1404612"
+    } 
+    if(x$name == "Jamie Dougan"){
+      res$lng <- "-89.6281685"#give exact coords. 
+      res$lat <- "34.1405366"
+    } 
+    if(x$name == "Joseph Paul Hogan"){
+      res$lng <- "-80.8729777"#give exact coords. 
+      res$lat <- "34.112632"
+    } 
+    if(x$name == "Tim A. Holmgren"){
+      res$lng <- "-103.2507667"#give exact coords. 
+      res$lat <- "44.102117"
+    } 
+    if(x$name == "Deveonte Johnson"){
+      res$lng <- "-97.5183415"#give exact coords. 
+      res$lat <- "35.4497174"
+    } 
+    if(x$name == "George Lee Seeton"){
+      res$lng <- "-97.4980065"#give exact coords. 
+      res$lat <- "35.4316821"
+    } 
+    if(x$name == "Rodney L. Cole"){
+      res$lng <- "-86.7335658"#give exact coords. 
+      res$lat <- "36.112096"
+    } 
+    if(x$name == "Jocques Scott Clemmons"){
+      res$lng <- "-86.7618719"#give exact coords. 
+      res$lat <- "36.1672424"
+    }  
+    if(x$name == "Oscar Junior"){
+      res$lng <- "-117.68114"#give exact coords. 
+      res$lat <- "35.6152533"
+    }   
+    if(x$name == "Rogelio Vidal Landa"){
+      res$lng <- "-119.0107207"#give exact coords. 
+      res$lat <- "35.2778013"
+    }
+    if(x$name == "Isaiah Murrietta-Golding"){
+      res$lng <- "-119.7745632"#give exact coords. 
+      res$lat <- "36.8015481"
+    }
     if(x$name == "William Tucker Mathis"){
       res$lng <- "-76.7788184"#give exact coords. 
       res$lat <- "39.1963485"
@@ -874,9 +1003,9 @@ for (i in 1:nrow(wpost)){
         warning( paste(x$name, "(", x$city,",", x$state,")", "is being mapped to the same location (",res$lat,res$lng ,") as someone else") )
       }
       
-      #Let user know if they're placing a marker in the center of a large city (>1e5) rather than exact location
-      if (as.numeric(res$population) > 1e6){
-        warning( paste(x$name, "is being mapped to the center of",res$toponymName,", a city of >1 million people","in",res$adminName1,"...") )
+      #Let user know if they're placing a marker in the center of a large city (>300k) rather than exact location
+      if (as.numeric(res$population) > 3e5){
+        warning( paste(x$name, "is being mapped to the center of",res$toponymName,", a city of >300 thousand people","in",res$adminName1,"...") )
       }
       
       
