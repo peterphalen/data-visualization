@@ -19,8 +19,10 @@ for (i in 1:nrow(wpost)){
   x <- wpost[i,]
   
   
-  #the geoname search function had trouble with the following names so
-  #I looked up the coordinates of their deaths manually
+  # I looked up the coordinates of the following deaths manually, 
+  # either because the geoname search function had trouble with them
+  # or because the cities they occurred in were too big for it to be reasonable
+  # to map deaths to their center
   exact.coords <- c("William Brigham", "Joshua Henry", "Frank W. Wratny", 
     "James Owens", "Joshua Martino","Kadeem Torres",
     "Kris Kristl", "Bradley Nelson", "Timothy Lionel Williams", 
