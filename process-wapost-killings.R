@@ -974,38 +974,26 @@ for (i in 1:nrow(wpost)){
       res <- res[res$population >0, ]
     }
     
-    if (nrow(res) > 1){ #if we still have multiple 
-                        # possible entries for the city-state...
 
-      
-      #(This block clears up an ambiguity in the LA entry)
-      if (x$city == "Los Angeles"){
-        res <- res[res$population >100000,]
-      }
-      
-      
       #if after all this we still have multiple possible entries
       #stop script and throw informative error
       if(nrow(res ) > 1){  
-        stop(paste0("Err on",x$name,". There are multiple indistinguishable entries for ", res$name," in the state of ",x$state,"\n"))
+        stop(paste0("Err on",unique(x$name),". There are multiple indistinguishable entries for ", unique(res$name)," in the state of ",unique(x$state),"\n"))
       }
       
-      
-      
-    }
     
     
     
-    if (i != 1){ 
+    if (i != 1){ #unless we're on the first entry...
       
-      #check to see if we put multiple people at identical lat-long
+      #check to see if we put multiple people at identical lat-long and
       #if so throw an informative warning and warn user...
-      dup <- (wp.loc[,"lat"] == res$lat) & (wp.loc[,"lng"] == res$lng)
+      dup <- (wp.loc[,"lat"] == res$lat) & (wp.loc[,"lng"] == res$lng) # vector showing rows with lat-lng pairs that match the current entry
       if (TRUE %in% dup){ 
         warning( paste(x$name, "(", x$city,",", x$state,")", "is being mapped to the same location (",res$lat,res$lng ,") as someone else") )
       }
       
-      #Let user know if they're placing a marker in the center of a large city (>300k) rather than exact location
+      #Also, et user know if they're placing a marker in the center of a large city (>300k) rather than a more exact location
       if (as.numeric(res$population) > 3e5){
         warning( paste(x$name, "is being mapped to the center of",res$toponymName,", a city of >300 thousand people","in",res$adminName1,"...") )
       }
