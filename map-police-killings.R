@@ -47,6 +47,7 @@ if (sum(!complete.cases(wpost$age)) > 0){
 wpost[!complete.cases(wpost$age),]$age <- "unknown"
 }
 
+wpost <- wpost[as.Date(wpost$date, format="yyyy-mm-dd") < as.Date("2018-01-01"),]
 
 source("/Users/PeterPhalen/Dropbox/data-visualization/process-wapost-killings.R")
 output <- processWaPoKillings(data = wpost, username = "peterphalen")
