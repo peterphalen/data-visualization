@@ -95,7 +95,7 @@ for (i in 1:nrow(wpost)){
    "George Gipp","Sean Bohinski","Marylsa Sanchez","Chester Randolph Ward",
    "David Leroy Thelen", "James C. Danforth","Robert Edwards","Salvador Byassee",
    "Raymond Cruz", "Quintas Harris", "Kemonte Cobbs","Steven James Young",
-   "Kenneth Lewis","Edgar Ramirez Carreto"
+   "Kenneth Lewis","Edgar Ramirez Carreto","Keshawn Wilson"
    )
   
 
@@ -105,7 +105,10 @@ for (i in 1:nrow(wpost)){
     
     names(res) <- c("lat", "lng")
     
- 
+    if(x$name ==  "Keshawn Wilson"){
+      res$lng <- "-74.1003626"#give exact coords. 
+      res$lat <- "40.0671884"
+    }
     if(x$name ==  "Edgar Ramirez Carreto"){
       res$lng <- "-112.029569"#give exact coords. 
       res$lat <- "33.4577218"

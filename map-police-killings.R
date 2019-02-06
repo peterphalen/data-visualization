@@ -35,7 +35,7 @@ wpost <- read.csv(textConnection(wpost))
 
 #restrict dataset to 2017-present
 wpost$date <- as.POSIXct(wpost$date)
-wpost <- wpost[wpost$date > "2016-12-31 EST",]
+wpost <- wpost[wpost$date > "2016-12-31 EST" & wpost$date < "2018-01-01 EST",]
 
 #rename variable to match thecounted scheme
 wpost <- rename(wpost, classification = manner_of_death)
@@ -47,7 +47,8 @@ if (sum(!complete.cases(wpost$age)) > 0){
 wpost[!complete.cases(wpost$age),]$age <- "unknown"
 }
 
-wpost <- wpost[as.Date(wpost$date, format="yyyy-mm-dd") < as.Date("2018-01-01"),]
+wpost$date <- as.Date(wpost$date, format="yyyy-mm-dd")
+wpost <- wpost[wpost$date < as.Date("2018-01-01") & wpost$date >= as.Date("2018-01-01"),]
 
 source("/Users/PeterPhalen/Dropbox/data-visualization/process-wapost-killings.R")
 output <- processWaPoKillings(data = wpost, username = "peterphalen")
