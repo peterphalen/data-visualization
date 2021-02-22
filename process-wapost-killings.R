@@ -1,4 +1,7 @@
 
+### THIS FUNCTION IS NO LONGER NECESSARY NOW THAT WAPO HAS BEGUN INCLUDING LAT AND LONG IN THEIR DATABASE
+### IT IS NO LONGER CALLED
+
 processWaPoKillings <- function(data, #wapo data
                                 username #register a username or you'll run out of download credits
                                 ){
