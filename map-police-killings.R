@@ -38,7 +38,7 @@ wpost <- read.csv(textConnection(wpost))
 
 #restrict dataset to 2017-present
 wpost$date <- as.POSIXct(wpost$date)
-wpost <- wpost[wpost$date > "2016-12-31 EST" & wpost$date < "2018-01-01 EST",]
+wpost <- wpost[wpost$date > "2016-12-31 EST",]
 
 #rename variable to match thecounted scheme
 wpost <- rename(wpost, classification = manner_of_death)
@@ -164,12 +164,15 @@ map <-  leaflet(data = thecounted) %>%   #data from the counted
                                                  ifelse(classification == "Other", "",
                                                         ifelse(classification == "Taser", "Killed by taser",
                                                                ifelse(classification == "Struck by vehicle", "Struck by vehicle", "")))))),
-                   group="2016") %>%
-  
-  
+                   group="2016") 
+
+### now we add the other years from WaPost
+
+for (i in 2017:max(year(wpost$date))){
+map <- map %>%
   ## 2017 only group from WaPost
-  addCircleMarkers(data=wpost[year(wpost$date) == 2017,], ~long, ~lat, stroke=FALSE, 
-                   color = wpost[year(wpost$date) == 2017,]$col, #color defined above
+  addCircleMarkers(data=wpost[year(wpost$date) == i,], ~long, ~lat, stroke=FALSE, 
+                   color = wpost[year(wpost$date) == i,]$col, #color defined above
                    fillOpacity = ~ifelse(armed=="unarmed",0.75,0.3), #make unarmed dots more visible
                    #create pop-up windows with some information for each marker
                    popup = ~ paste(name, "<br/>",
@@ -190,11 +193,13 @@ map <-  leaflet(data = thecounted) %>%   #data from the counted
                                    #include cause of death
                                    ifelse(classification == "shot", "Killed by gunshot",
                                           classification)),
-                   group="2017") %>%
-  
+                   group=as.character(i)) 
+}
+
+map <- map %>%  
   #give user the option of selecting years manually
   addLayersControl(
-    overlayGroups = c("2015","2016", "2017"),
+    overlayGroups = 2015:max(year(wpost$date)),
     options = layersControlOptions(collapsed = FALSE)
   )
 
@@ -245,10 +250,8 @@ map.pov <- leaflet(data = thecounted) %>%   #data from the counted
   addProviderTiles("CartoDB.Positron") %>%
   
   #add census-tract level indicator of income
-  addTiles(
-    urlTemplate = "http://www.justicemap.org/tile/tract/income/{z}/{x}/{y}.png",
-    attribution = '<a href="http://www.justicemap.org/index.php?gsLayer=income&gfLon=-95.3&gfLat=39.6&giZoom=4&">Justice Map</a>',
-    options=tileOptions(opacity=.55)
+  addProviderTiles("JusticeMap.income",
+    options=tileOptions(opacity=.55, size="tract")
   ) %>%  
   
   #fit bounds around the USA
@@ -296,8 +299,8 @@ map.pov <- leaflet(data = thecounted) %>%   #data from the counted
                                                                ifelse(classification == "Struck by vehicle", "Struck by vehicle", ""))))))         
   ) %>%
   
-  ## 2017 only group FROM WAPOST
-  addCircleMarkers(data=wpost[year(wpost$date) == 2017,], ~long, ~lat,
+  ## 2017+ group FROM WAPOST
+  addCircleMarkers(data=wpost, ~long, ~lat,
                    color = marker.col, #color defined above
                    #create pop-up windows with some information for each marker
                    popup = ~ paste(name, "<br/>",
