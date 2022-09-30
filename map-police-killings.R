@@ -46,7 +46,7 @@ wpost <- rename(wpost, long = longitude)
 wpost <- rename(wpost, lat = latitude)
 
 wpost <- wpost[complete.cases(as.numeric(wpost$lat)),] #remove missing lat/lang
-wpost <- wpost[complete.cases(as.numeric(wpost$lat)),] 
+wpost <- wpost[complete.cases(as.numeric(wpost$long)),] 
 
 #rm TBA names
 wpost <- wpost[wpost$name != "TK TK",] 
@@ -218,15 +218,15 @@ html.map <- HTML(substr(html.file, 1,head.loc+5),
     <link rel=\"icon\" type=\"image/png\" href=\"../images/icon-code-fork-32x32.png\" sizes=\"32x32\">
     <link rel=\"icon\" type=\"image/x-icon\" href=\"../images/favicon.ico\">
     <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"../images/favicon.ico\"/>
-    <meta property=\"og:url\" content=\"https://www.peterphalen.com/datavisualization/map-police-killings.html\"/>
+    <meta property=\"og:url\" content=\"https://peterphalen.github.io/datavisualization/map-police-killings.html\"/>
     <meta property=\"og:title\" content=\"Mapping police killings\"/>
     <meta property=\"og:description\" content=\"Interactive map of police killings in the United States. Generated using data from The Guardian's The Counted project.\"/>
-    <meta property=\"og:image\" content=\"https://www.peterphalen.com/images/police-killings-map-img.png\"/>
+    <meta property=\"og:image\" content=\"https://peterphalen.github.io/images/police-killings-map-img.png\"/>
     <meta property=\"og:type\" content=\"website\"/>
     <meta property=\"twitter:card\" content=\"summary_large_image\"/>
     <meta property=\"twitter:creator\" content=\"@peterphalen\"/>
     <meta property=\"twitter:description\" content=\"Interactive map of police killings in the United States. Generated using data from The Guardian's The Counted project.\"/>
-    <meta name=\"twitter:image\" content=\"https://www.peterphalen.com/images/police-killings-map-img.png\"/>",
+    <meta name=\"twitter:image\" content=\"https://peterphalen.github.io/images/police-killings-map-img.png\"/>",
                  substr(html.file, (head.loc+6),nchar(html.file)))
 
 
@@ -336,18 +336,20 @@ html.pov <- HTML(substr(html.pov, 1,head.loc+5),
                  <meta name=\"description\" content=\"Coordinates of police killings across the United States of America, with map colored according to the average income of the census tract. In populated areas such as major cities, it is clear that poorer neighborhoods have greater rates of police killings.\">
                  <meta charset=\"utf-8\"/>
                  <meta name=\"author\" content=\"Peter Phalen\"/>
+                  <link href=\"http://peterphalen.github.io/datavisualization/poverty-police-killings\" rel=\"canonical\">
+
                   <link rel=\"icon\" type=\"image/png\" href=\"../images/icon-code-fork-16x16.png\" sizes=\"16x16\">
                   <link rel=\"icon\" type=\"image/png\" href=\"../images/icon-code-fork-32x32.png\" sizes=\"32x32\">
                   <link rel=\"icon\" type=\"image/x-icon\" href=\"../images/favicon.ico\">
                   <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"../images/favicon.ico\"/>
-                  <meta property=\"og:url\" content=\"https://www.peterphalen.com/datavisualization/poverty-police-killings.html\"/>
+                  <meta property=\"og:url\" content=\"https://peterphalen.github.io/datavisualization/poverty-police-killings.html\"/>
                   <meta property=\"og:title\" content=\"Poverty and police killings\"/>
                   <meta property=\"og:description\" content=\"Mapping income against killings by police in the United States. Generated using data from Justice Map and The Guardian's The Counted project.\"/>
-                  <meta property=\"og:image\" content=\"https://www.peterphalen.com/images/income-police-killings.png\"/>
+                  <meta property=\"og:image\" content=\"https://peterphalen.github.io/images/income-police-killings.png\"/>
                   <meta property=\"twitter:card\" content=\"summary_large_image\"/>
                   <meta property=\"twitter:creator\" content=\"@peterphalen\"/>
                   <meta property=\"twitter:description\" content=\"Mapping income against killings by police in the United States. Generated using data from Justice Map and The Guardian's The Counted project.\"/>
-                  <meta name=\"twitter:image\" content=\"https://www.peterphalen.com/images/income-police-killings.png\"/>",
+                  <meta name=\"twitter:image\" content=\"https://peterphalen.github.io/images/income-police-killings.png\"/>",
                  substr(html.pov, (head.loc+6),nchar(html.pov)))
 
 
